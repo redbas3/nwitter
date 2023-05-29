@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AppRouter from "components/Router";
 import { authService } from "fBase";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 function App() {
   const [init, setInit] = useState(false);
@@ -16,10 +16,23 @@ function App() {
       setInit(true);
     });
   }, []);
+  const onLogout = () => {
+    signOut(authService).then(() => {
+      // Sign-out successful.
+    }).catch((error) => {
+      // An error happened.
+    });
+
+  }
   return (
     <>
       {init ? <AppRouter isLoggedIn={isLoggedIn} /> : "Init..."}
-      <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
+      <footer>
+        <div>
+          <button onClick={onLogout}>Logout</button>
+        </div>
+        &copy; {new Date().getFullYear()} Nwitter
+      </footer>
     </>
   );
 }
