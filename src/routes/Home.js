@@ -7,6 +7,7 @@ import {
   onSnapshot,
   orderBy,
 } from "firebase/firestore";
+import Nweet from "components/Nweet";
 
 const Home = ({ userObj }) => {
   const [nweet, setNweet] = useState("");
@@ -21,7 +22,6 @@ const Home = ({ userObj }) => {
       querySnapshot.forEach((document) => {
         nweetArray.push({ ...document.data(), id: document.id });
       });
-      console.log(nweetArray);
       setNweets(nweetArray);
     });
   }, []);
@@ -31,7 +31,7 @@ const Home = ({ userObj }) => {
       await addDoc(collection(dbService, "nweets"), {
         text: nweet,
         createdAt: Date.now(),
-        createdId: userObj.uid,
+        creatorId: userObj.uid,
       });
       setNweet("");
     } catch (error) {
@@ -47,6 +47,7 @@ const Home = ({ userObj }) => {
     setNweet(value);
   };
 
+  console.log(nweets);
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -60,9 +61,11 @@ const Home = ({ userObj }) => {
         <input type="submit" value="Nweet" />
         <div>
           {nweets.map((nweet) => (
-            <div key={nweet.id}>
-              <h4>{nweet.text}</h4>
-            </div>
+            <Nweet
+              key={nweet.id}
+              nweetObj={nweet}
+              isOwner={nweet.creatorId === userObj.uid}
+            />
           ))}
         </div>
       </form>
