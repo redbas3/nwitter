@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   GithubAuthProvider,
-  signInWithPopup
+  signInWithPopup,
 } from "firebase/auth";
 import { authService } from "fBase";
 
@@ -26,7 +26,6 @@ const Auth = () => {
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    let data;
     if (newAccount) {
       await createUserWithEmailAndPassword(authService, email, password)
         .then((userCredential) => {
@@ -50,37 +49,40 @@ const Auth = () => {
     }
   };
 
-  const toggleAccount = () => setNewAccount((prev) => !prev)
+  const toggleAccount = () => setNewAccount((prev) => !prev);
   const onSocialClcik = (event) => {
-    const { target: { name } } = event;
+    const {
+      target: { name },
+    } = event;
     let provider;
-    if (name === 'google') {
+    if (name === "google") {
       provider = new GoogleAuthProvider();
-    } else if (name === 'github') {
+    } else if (name === "github") {
       provider = new GithubAuthProvider();
     }
     signInWithPopup(authService, provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential.accessToken;
         // The signed-in user info.
-        const user = result.user;
+        // const user = result.user;
         // IdP data available using getAdditionalUserInfo(result)
         // ...
-      }).catch((error) => {
+      })
+      .catch((error) => {
         // Handle Errors here.
-        const errorCode = error.code;
+        // const errorCode = error.code;
         const errorMessage = error.message;
         // The email of the user's account used.
-        const email = error.customData.email;
+        // const email = error.customData.email;
         // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
+        // const credential = GoogleAuthProvider.credentialFromError(error);
 
         setError(errorMessage);
         // ...
       });
-  }
+  };
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -103,10 +105,16 @@ const Auth = () => {
         <input type="submit" value={newAccount ? "Create Account" : "Log In"} />
         {error}
       </form>
-      <span onClick={toggleAccount}>{newAccount ? "Sign In" : "Create Account"}</span>
+      <span onClick={toggleAccount}>
+        {newAccount ? "Sign In" : "Create Account"}
+      </span>
       <div>
-        <button name="google" onClick={onSocialClcik}>Continue with Google</button>
-        <button name="github" onClick={onSocialClcik}>Continue with Github</button>
+        <button name="google" onClick={onSocialClcik}>
+          Continue with Google
+        </button>
+        <button name="github" onClick={onSocialClcik}>
+          Continue with Github
+        </button>
       </div>
     </div>
   );

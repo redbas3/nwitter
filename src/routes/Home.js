@@ -20,7 +20,7 @@ const Home = ({ userObj }) => {
     onSnapshot(q, (querySnapshot) => {
       const nweetArray = [];
       querySnapshot.forEach((document) => {
-        nweetArray.push({ ...document.data(), id: document.id });
+        nweetArray.push({ id: document.id, ...document.data() });
       });
       setNweets(nweetArray);
     });
@@ -47,7 +47,6 @@ const Home = ({ userObj }) => {
     setNweet(value);
   };
 
-  console.log(nweets);
   return (
     <div>
       <form onSubmit={onSubmit}>
