@@ -9,20 +9,32 @@ const AppRouter = ({ isLoggedIn, userObj, setUserObj }) => {
   return (
     <Router>
       {isLoggedIn && <Navigation userObj={userObj} />}
-      <Routes>
-        {isLoggedIn ? (
-          <>
+
+      {isLoggedIn ? (
+        <div
+          style={{
+            maxWidth: 890,
+            width: "100%",
+            margin: "0 auto",
+            marginTop: 80,
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Routes>
             <Route exact path="/" element={<Home userObj={userObj} />}></Route>
             <Route
               exact
               path="/profile"
               element={<Profile setUserObj={setUserObj} userObj={userObj} />}
             ></Route>
-          </>
-        ) : (
+          </Routes>
+        </div>
+      ) : (
+        <Routes>
           <Route exact path="/" element={<Auth />}></Route>
-        )}
-      </Routes>
+        </Routes>
+      )}
     </Router>
   );
 };
