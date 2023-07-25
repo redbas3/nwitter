@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { dbService, storageServiece } from "fBase";
-import { ref, uploadString } from "firebase/storage";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import {
   addDoc,
   collection,
@@ -14,7 +14,7 @@ import Nweet from "components/Nweet";
 const Home = ({ userObj }) => {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
-  const [attachment, setAttachment] = useState();
+  const [attachment, setAttachment] = useState(null);
   useEffect(() => {
     const q = query(
       collection(dbService, "nweets"),
@@ -31,20 +31,30 @@ const Home = ({ userObj }) => {
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    const fileRef = ref(storageServiece, `${userObj.uid}/${uuidv4()}`);
-    const response = await uploadString(fileRef, attachment, "data_url");
-    console.log(response);
+    let attachmentUrl = "";
+    if (attachment) {
+      const attachmentRef = ref(storageServiece, `${userObj.uid}/${uuidv4()}`);
+      const response = await uploadString(
+        attachmentRef,
+        attachment,
+        "data_url"
+      );
+      attachmentUrl = await getDownloadURL(response.ref);
+    }
+    const nweetObj = {
+      text: nweet,
+      createdAt: Date.now(),
+      creatorId: userObj.uid,
+      attachmentUrl,
+    };
 
-    // try {
-    //   await addDoc(collection(dbService, "nweets"), {
-    //     text: nweet,
-    //     createdAt: Date.now(),
-    //     creatorId: userObj.uid,
-    //   });
-    //   setNweet("");
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      await addDoc(collection(dbService, "nweets"), nweetObj);
+      setNweet("");
+      setAttachment(null);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const onChange = (event) => {
     event.preventDefault();
