@@ -17,7 +17,11 @@ function App() {
   return (
     <>
       {init ? (
-        <AppRouter userObj={userObj} isLoggedIn={Boolean(userObj)} />
+        <AppRouter
+          userObj={userObj}
+          setUserObj={setUserObj}
+          isLoggedIn={Boolean(userObj)}
+        />
       ) : (
         "Init..."
       )}
