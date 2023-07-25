@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { authService, dbService } from "fBase";
+import { authService } from "fBase";
 import { updateCurrentUser, updateProfile } from "firebase/auth";
 import { signOut } from "firebase/auth";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 
 function Profile({ setUserObj, userObj }) {
   const history = useNavigate();
@@ -17,24 +16,6 @@ function Profile({ setUserObj, userObj }) {
         // An error happened.
       });
   };
-
-  const getMyNweets = async () => {
-    const q = query(
-      collection(dbService, "nweets"),
-      where("creatorId", "==", userObj.uid),
-      orderBy("createdAt", "desc")
-    );
-    const querySnapshot = await getDocs(q);
-    const nweets = [];
-    querySnapshot.forEach((doc) => {
-      nweets.push(doc);
-    });
-    console.log(nweets);
-  };
-
-  useEffect(() => {
-    getMyNweets();
-  }, []);
 
   const onChange = (event) => {
     const {

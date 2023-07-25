@@ -5,8 +5,6 @@ import {
 } from "firebase/auth";
 import { authService } from "fBase";
 
-const inputStyles = {};
-
 const AuthForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
