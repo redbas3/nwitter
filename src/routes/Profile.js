@@ -11,7 +11,6 @@ function Profile({ setUserObj, userObj }) {
   const onLogOutClick = () => {
     signOut(authService)
       .then(() => {
-        setUserObj(null);
         history("/");
       })
       .catch((error) => {
@@ -62,7 +61,7 @@ function Profile({ setUserObj, userObj }) {
           onChange={onChange}
           type="text"
           placeholder="Display name"
-          value={newDisplayName}
+          value={newDisplayName ?? "User"}
         />
         <input type="submit" value="Update Profile" />
       </form>
